@@ -1,0 +1,158 @@
+# action.yml
+name: notation-venafi-csp-action
+author: zosocanuck
+description: 'Installs notation, Venafi CSP plugin and includes it in your path'
+branding:
+  icon: 'package'
+  color: 'blue'
+# This is pinned to the last major release, we have to bump it for each action version.
+inputs:
+  notation-venafi-csp-release:
+    description: 'Venafi notation csp plugin release version to be installed'
+    required: false
+    default: 'alpha'
+  install-dir:
+    description: 'Where to install the notation binary and plugin'
+    required: false
+    default: '$HOME/.notation-venafi-csp'
+  use-sudo:
+    description: 'set to true if install-dir location requires sudo privs'
+    required: false
+    default: 'false'
+runs:
+  using: "composite"
+  steps:
+    # We verify the version against a SHA **in the published action itself**, not in the GCS bucket.
+    - shell: bash
+      run: |
+        #!/bin/bash
+        # vsign install script
+        shopt -s expand_aliases
+        if [ -z "$NO_COLOR" ]; then
+          alias log_info="echo -e \"\033[1;32mINFO\033[0m:\""
+          alias log_error="echo -e \"\033[1;31mERROR\033[0m:\""
+        else
+          alias log_info="echo \"INFO:\""
+          alias log_error="echo \"ERROR:\""
+        fi
+        set -e
+
+        mkdir -p ${{ inputs.install-dir }}
+
+        shaprog() {
+          case ${{ runner.os }} in
+            Linux)
+              sha256sum $1 | cut -d' ' -f1
+              ;;
+            macOS)
+              shasum -a256 $1 | cut -d' ' -f1
+              ;;
+            Windows)
+              powershell -command "(Get-FileHash $1 -Algorithm SHA256 | Select-Object -ExpandProperty Hash).ToLower()"
+              ;;
+            *)
+              log_error "unsupported OS ${{ runner.os }}"
+              exit 1
+              ;;
+          esac
+        }
+
+        bootstrap_version='alpha'
+        bootstrap_linux_amd64_sha='be29a1b7d3cd53c26ac7c942c71c0936862d40ff7702ee87d5e4bb16f9e4450f'
+        bootstrap_darwin_amd64_sha='63cf400023fc1586db81bd36a37682b48ce4db8d42618ff8798e6a032930d591'
+        bootstrap_windows_amd64_sha='119813d0618af9fdad7115f8d8b939bb8835f19e887e722b79cf9b8251be1a68'
+        notation_executable_name=notation
+        notation_venafi_csp_plugin_executable_name=notation-venafi-csp
+
+        trap "popd >/dev/null" EXIT
+
+        pushd ${{ inputs.install-dir }} > /dev/null
+
+        case ${{ runner.os }} in
+          Linux)
+            case ${{ runner.arch }} in
+              X64)
+                bootstrap_filename='notation-venafi-csp-linux-amd64'
+                bootstrap_sha=${bootstrap_linux_amd64_sha}
+                desired_notation_plugin_filename='notation-venafi-csp-linux-amd64'
+                ;;
+
+              *)
+                log_error "unsupported architecture $arch"
+                exit 1
+                ;;
+            esac
+            ;;
+
+          macOS)
+            case ${{ runner.arch }} in
+              X64)
+                bootstrap_filename='notation-venafi-csp-darwin-amd64'
+                bootstrap_sha=${bootstrap_darwin_amd64_sha}
+                desired_notation_plugin_filename='notation-venafi-csp-darwin-amd64'
+                ;;
+
+              *)
+                log_error "unsupported architecture $arch"
+                exit 1
+                ;;
+            esac
+            ;;
+
+          Windows)
+            case ${{ runner.arch }} in
+              X64)
+                bootstrap_filename='notation-venafi-csp-windows-amd64.exe'
+                bootstrap_sha=${bootstrap_windows_amd64_sha}
+                desired_notation_plugin_filename='notation-venafi-csp-windows-amd64.exe'
+                notation_plugin_executable_name=notation-venafi-csp-windows-amd64.exe
+                ;;
+              *)
+                log_error "unsupported architecture $arch"
+                exit 1
+                ;;
+            esac
+            ;;
+          *)
+            log_error "unsupported architecture $arch"
+            exit 1
+            ;;
+        esac
+
+        SUDO=
+        if "${{ inputs.use-sudo }}" == "true" && command -v sudo >/dev/null; then
+          SUDO=sudo
+        fi
+
+        expected_bootstrap_version_digest=${bootstrap_sha}
+        log_info "Downloading bootstrap version '${bootstrap_version}' of notation-venafi-csp plugin to verify version to be installed...\n      https://storage.googleapis.com/notation-venafi-csp-releases/${bootstrap_version}/${bootstrap_filename}"
+        $SUDO curl -sL https://storage.googleapis.com/notation-venafi-csp-releases/${bootstrap_version}/${bootstrap_filename} -o ${notation_venafi_csp_plugin_executable_name}
+        shaBootstrap=$(shaprog ${notation_venafi_csp_plugin_executable_name});
+        if [[ $shaBootstrap != ${expected_bootstrap_version_digest} ]]; then
+          log_error "Unable to validate notation-venafi-csp plugin version: '${{ inputs.notation-venafi-csp-release }}'"
+          exit 1
+        fi
+        $SUDO chmod +x ${notation_venafi_csp_plugin_executable_name}
+
+
+        log_info "Downloading notation 0.9.0-alpha.1 version"
+        $SUDO curl -sL https://github.com/notaryproject/notation/releases/download/v0.9.0-alpha.1/notation_0.9.0-alpha.1_darwin_amd64.tar.gz - o notation.tar.gz
+        $SUDO tar xvf notation.tar.gz
+
+        # If the bootstrap and specified `vsign` releases are the same, we're done.
+        if [[ ${{ inputs.notation-venafi-csp-release }} == ${bootstrap_version} ]]; then
+          log_info "bootstrap version successfully verified and matches requested version so nothing else to do"
+          exit 0
+        fi
+
+        if ${{ runner.os }} == 'macOS'; then
+          $SUDO mkdir -p  ~/Library/Application\ Support/notation/plugins/venafi-csp/
+          $SUDO cp ${notation_venafi_csp_plugin_executable_name} ~/Library/Application\ Support/notation/plugins/venafi-csp/
+        fi
+
+    - if: ${{ runner.os == 'Linux' || runner.os == 'macOS' }}
+      run:  echo "${{ inputs.install-dir }}" >> $GITHUB_PATH
+      shell: bash
+    - if: ${{ runner.os == 'Windows' }}
+      run:  echo "${{ inputs.install-dir }}" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
+      shell: pwsh
