@@ -1,0 +1,31 @@
+name: test-notation-venafi-csp-action
+
+on:
+  workflow_dispatch:
+  push:
+    branches: ['main', 'release-*']
+  pull_request:
+
+jobs:
+  test_notation_venafi_csp_action:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [macos-latest]
+    permissions: {}
+    name: Install notation, venafi csp plugin and test presence in path
+    steps:
+    - uses: actions/checkout@2541b1294d2704b0964813337f33b291d3f8596b # v3
+    - name: Install notation and plugin
+      uses: ./
+    - name: Check install!
+      run: notation -v
+    - name: Check root directory
+      run: |
+        if [[ $(git diff --stat) != '' ]]; then
+          echo 'should be clean'
+          exit 1
+        else
+          exit 0
+        fi
+      shell: bash
