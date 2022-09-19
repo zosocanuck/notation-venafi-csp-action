@@ -136,7 +136,7 @@ runs:
 
 
         log_info "Downloading notation 0.9.0-alpha.1 version"
-        $SUDO curl -sL https://github.com/notaryproject/notation/releases/download/v0.9.0-alpha.1/notation_0.9.0-alpha.1_darwin_amd64.tar.gz - o notation.tar.gz
+        $SUDO curl -sL https://github.com/notaryproject/notation/releases/download/v0.9.0-alpha.1/notation_0.9.0-alpha.1_darwin_amd64.tar.gz -o notation.tar.gz
         $SUDO tar xvf notation.tar.gz
 
         # If the bootstrap and specified `vsign` releases are the same, we're done.
