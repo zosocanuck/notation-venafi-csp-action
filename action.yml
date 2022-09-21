@@ -143,7 +143,7 @@ runs:
         if "${{ runner.os }}" == "macOS"; then
           $SUDO mkdir -p  ~/Library/Application\ Support/notation/plugins/venafi-csp/
           $SUDO cp ${notation_venafi_csp_plugin_executable_name} ~/Library/Application\ Support/notation/plugins/venafi-csp/
-        elif "${{ runner.os }}"" == "Linux"; then
+        elif "${{ runner.os }}" == "Linux"; then
           $SUDO mkdir -p  ~/.config/notation/plugins/venafi-csp
           $SUDO cp ${notation_venafi_csp_plugin_executable_name} ~/.config/notation/plugins/venafi-csp
         fi
