@@ -58,7 +58,7 @@ runs:
         }
 
         bootstrap_version='alpha'
-        bootstrap_linux_amd64_sha='be29a1b7d3cd53c26ac7c942c71c0936862d40ff7702ee87d5e4bb16f9e4450f'
+        bootstrap_linux_amd64_sha='5705fadc12078dbd44e8504b5850098614c8928d8d8b6e92cfc323382a92bf1f'
         bootstrap_darwin_amd64_sha='63cf400023fc1586db81bd36a37682b48ce4db8d42618ff8798e6a032930d591'
         bootstrap_windows_amd64_sha='119813d0618af9fdad7115f8d8b939bb8835f19e887e722b79cf9b8251be1a68'
         notation_executable_name=notation
