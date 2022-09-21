@@ -1,7 +1,6 @@
-# vSign GitHub Action
+# Venafi CodeSign Protect Notation Plugin GitHub Action
 
-This action enables you to sign and verify container images using `vsign`.
-`vsign` verifies the integrity of the `vsign` release during installation.
+This action enables you to sign and verify container images using `notation` with Venafi CodeSign Protect using the Venafi notation plugin.
 
 ## Usage
 
@@ -10,45 +9,45 @@ This action currently supports GitHub-provided Linux, macOS and Windows runners 
 Add the following entry to your Github workflow YAML file:
 
 ```yaml
-uses: zosocanuck/vsign-action@main
+uses: zosocanuck/notation-venafi-csp-action@main
 with:
-  vsign-release: 'v0.1.0' # optional
+  plugin-release: 'v0.1.0' # optional
 ```
 
 Example using a pinned version:
 
 ```yaml
 jobs:
-  test_vsign_action:
+  test_notation_action:
     runs-on: ubuntu-latest
 
     permissions: {}
 
-    name: Install vsign and test presence in path
+    name: Install notation with plugin and test presence in path
     steps:
-      - name: Install vsign
-        uses: zosocanuck/vsign-action@main
+      - name: Install notation
+        uses: zosocanuck/notation-venafi-csp-action@main
         with:
-          cosign-release: 'v0.1.0'
+          plugin-release: 'v0.1.0'
       - name: Check install!
-        run: vsign version
+        run: notation version
 ```
 
 Example using the default version:
 
 ```yaml
 jobs:
-  test_vsign_action:
+  test_notation_action:
     runs-on: ubuntu-latest
 
     permissions: {}
 
-    name: Install vsign and test presence in path
+    name: Install notation and test presence in path
     steps:
-      - name: Install vsign
-        uses: zosocanuck/vsign-action@main
+      - name: Install notation
+        uses: zosocanuck/notation-venafi-csp-action@main
       - name: Check install!
-        run: vsign version
+        run: notation version
 ```
 
 This action does not need any GitHub permission to run, however, if your workflow needs to update, create or perform any
@@ -61,7 +60,7 @@ Example of a simple workflow:
 
 ```yaml
 jobs:
-  test_vsign_action:
+  test_notation_action:
     runs-on: ubuntu-latest
 
     permissions:
@@ -69,14 +68,14 @@ jobs:
       packages: write
       id-token: write # needed for signing the images with GitHub OIDC Token **not production ready**
 
-    name: Install vsign and test presence in path
+    name: Install notation and test presence in path
     steps:
       - uses: actions/checkout@master
         with:
           fetch-depth: 1
 
-      - name: Install vsign
-        uses: zosocanuck/vsign-action@main
+      - name: Install notation and plugin
+        uses: zosocanuck/notation-venafi-csp-action@main
 
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v1
@@ -99,7 +98,7 @@ jobs:
 
       - name: Sign image with a key
         run: |
-          vsign sign --image ghcr.io/sample/app --mechanism 64
+          notation sign --key "my-csp-cert" ghcr.io/sigstore/sample-honk
         env:
           TAGS: ${{ steps.docker_meta.outputs.tags }}
           VSIGN_URL: https://tpp.example.com
@@ -112,6 +111,6 @@ The following optional inputs:
 
 | Input | Description |
 | --- | --- |
-| `vsign-release` | `vsign` version to use instead of the default. |
-| `install-dir` | directory to place the `vsign` binary into instead of the default (`$HOME/.vsign`). |
+| `notation-release` | `notation` version to use instead of the default. |
+| `install-dir` | directory to place the `notation` binary into instead of the default (`$HOME/.notation-venafi-csp`). |
 | `use-sudo` | set to `true` if `install-dir` location requires sudo privs. Defaults to false. |
