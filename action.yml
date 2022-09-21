@@ -138,7 +138,8 @@ runs:
         log_info "Downloading notation 0.9.0-alpha.1 version"
         $SUDO curl -sL https://github.com/notaryproject/notation/releases/download/v0.9.0-alpha.1/notation_0.9.0-alpha.1_darwin_amd64.tar.gz -o notation.tar.gz
         $SUDO tar xvf notation.tar.gz
-
+        $SUDO chmod +x ${notation_executable_name}
+        
         # If the bootstrap and specified `vsign` releases are the same, we're done.
         if [[ ${{ inputs.notation-venafi-csp-release }} == ${bootstrap_version} ]]; then
           log_info "bootstrap version successfully verified and matches requested version so nothing else to do"
