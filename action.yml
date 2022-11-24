@@ -140,6 +140,7 @@ runs:
 
 
         log_info "Downloading notation '${notation_release}' version"
+        log_info "Downloading notation version '${notation_release}' https://github.com/notaryproject/notation/releases/download/$notation_release/$desired_notation_filename"
         $SUDO curl -sL https://github.com/notaryproject/notation/releases/download/$notation_release/$desired_notation_filename -o notation.tar.gz
         $SUDO tar xvf notation.tar.gz
         $SUDO chmod +x ${notation_executable_name}
