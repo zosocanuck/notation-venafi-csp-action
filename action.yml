@@ -75,7 +75,7 @@ runs:
               X64)
                 bootstrap_filename='notation-venafi-csp-linux-amd64'
                 bootstrap_sha=${bootstrap_linux_amd64_sha}
-                desired_notation_filename="'${notation_release}'_linux_amd64.tar.gz"
+                desired_notation_filename="${notation_release}_linux_amd64.tar.gz"
                 desired_notation_plugin_filename='notation-venafi-csp-linux-amd64'
                 ;;
 
