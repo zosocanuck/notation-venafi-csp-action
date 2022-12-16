@@ -57,7 +57,7 @@ runs:
           esac
         }
 
-        notation_release='0.12.0-beta.1.dev.20221120'
+        notation_release='1.0.0-rc.1'
         bootstrap_version='v0.1.0-alpha.2'
         bootstrap_linux_amd64_sha='85053f6ad7b99be4983d1155ccdcc1f971e35b68ada48e9444cc42c4660d10ad'
         bootstrap_darwin_amd64_sha='e38020a31d62aab54c3c1f202bce9b917f0b14a6b563ee6676019dc3926ea3fc'
