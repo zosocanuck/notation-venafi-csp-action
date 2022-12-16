@@ -19,7 +19,7 @@ jobs:
     - name: Install notation and plugin
       uses: ./
     - name: Check install!
-      run: notation -v
+      run: notation version
     - name: Check root directory
       run: |
         if [[ $(git diff --stat) != '' ]]; then
