@@ -59,9 +59,9 @@ runs:
 
         notation_release='0.12.0-beta.1.dev.20221120'
         bootstrap_version='v0.1.0-alpha.2'
-        bootstrap_linux_amd64_sha='bd2e1310a1c398c3fe0edcf672c69f986a4f26333b175210892813b5d529f31c'
-        bootstrap_darwin_amd64_sha='eca78b818e59f3a304529bc4a875b871356755054e14c276bd9b74312a1a2b6f'
-        bootstrap_windows_amd64_sha='63781f98d4da80177cdf0e7cc4d3e051e7f187e08cf9b42b4fd2a34769c651e5'
+        bootstrap_linux_amd64_sha='85053f6ad7b99be4983d1155ccdcc1f971e35b68ada48e9444cc42c4660d10ad'
+        bootstrap_darwin_amd64_sha='e38020a31d62aab54c3c1f202bce9b917f0b14a6b563ee6676019dc3926ea3fc'
+        bootstrap_windows_amd64_sha='071295efedb82f31cd54c1f280bbc5df9c40314a3ad5991aab055f2e8846969e'
         notation_executable_name=notation
         notation_venafi_csp_plugin_executable_name=notation-venafi-csp
 
