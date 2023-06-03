@@ -57,11 +57,11 @@ runs:
           esac
         }
 
-        notation_release='1.0.0-rc.1'
-        bootstrap_version='v0.1.0-alpha.2'
-        bootstrap_linux_amd64_sha='39411105c3a82bf546c5acffd42a9409be0f5a9103fbf37a34a3bde4d07a2aa7'
-        bootstrap_darwin_amd64_sha='62a96ff4d0630aa59fd75878638e1debdad7402468503999e70af80659a8bcd2'
-        bootstrap_windows_amd64_sha='bdfe1c7e1680dedf038617bb4b1d0a9508773c9295e91f35d07b4d0ccc368f66'
+        notation_release='1.0.0-rc.7'
+        bootstrap_version='v0.1.0-beta'
+        bootstrap_linux_amd64_sha='18e5233f1e40ff0ae3de6e68f7681922631418e76d03b25757521cab5aa7a102'
+        bootstrap_darwin_amd64_sha='2c7c3c2150ff15ccf7b3a49e1c4dbbb8018c1af2b6770a0e0f19827aa850d357'
+        bootstrap_windows_amd64_sha='3077c909064a95310768a881c1ccf6e49523dda1fc49c5154c80d8180c99115f'
         notation_executable_name=notation
         notation_venafi_csp_plugin_executable_name=notation-venafi-csp
 
@@ -129,8 +129,8 @@ runs:
         fi
 
         expected_bootstrap_version_digest=${bootstrap_sha}
-        log_info "Downloading bootstrap version '${bootstrap_version}' of notation-venafi-csp plugin to verify version to be installed...\n      https://storage.googleapis.com/notation-venafi-csp-releases/${bootstrap_version}/${bootstrap_filename}"
-        $SUDO curl -sL https://storage.googleapis.com/notation-venafi-csp-releases/${bootstrap_version}/${bootstrap_filename} -o ${notation_venafi_csp_plugin_executable_name}
+        log_info "Downloading bootstrap version '${bootstrap_version}' of notation-venafi-csp plugin to verify version to be installed...\n      https://github.com/Venafi/notation-venafi-csp/releases/download/${bootstrap_version}/${bootstrap_filename}"
+        $SUDO curl -sL https://github.com/Venafi/notation-venafi-csp/releases/download/${bootstrap_version}/${bootstrap_filename} -o ${notation_venafi_csp_plugin_executable_name}
         shaBootstrap=$(shaprog ${notation_venafi_csp_plugin_executable_name});
         if [[ $shaBootstrap != ${expected_bootstrap_version_digest} ]]; then
           log_error "Unable to validate notation-venafi-csp plugin version: '${{ inputs.notation-venafi-csp-release }}'"
