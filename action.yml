@@ -22,11 +22,11 @@ inputs:
 runs:
   using: "composite"
   steps:
-    # We verify the version against a SHA **in the published action itself**, not in the GCS bucket.
+    # We verify the version against a SHA in the published action itself.
     - shell: bash
       run: |
         #!/bin/bash
-        # vsign install script
+        # notation venafi plugin install script
         shopt -s expand_aliases
         if [ -z "$NO_COLOR" ]; then
           alias log_info="echo -e \"\033[1;32mINFO\033[0m:\""
@@ -57,11 +57,11 @@ runs:
           esac
         }
 
-        notation_release='1.0.0-rc.7'
-        bootstrap_version='v0.1.0-beta'
-        bootstrap_linux_amd64_sha='18e5233f1e40ff0ae3de6e68f7681922631418e76d03b25757521cab5aa7a102'
-        bootstrap_darwin_amd64_sha='2c7c3c2150ff15ccf7b3a49e1c4dbbb8018c1af2b6770a0e0f19827aa850d357'
-        bootstrap_windows_amd64_sha='3077c909064a95310768a881c1ccf6e49523dda1fc49c5154c80d8180c99115f'
+        notation_release='1.0.0'
+        bootstrap_version='v0.2.0-beta'
+        bootstrap_linux_amd64_sha='1f69ff37e7ff411ea0eb3b72b57e545ba8ad1ec46e9ad74612c5ab84b0d0ed4e'
+        bootstrap_darwin_amd64_sha='01f6da2325d0dfc35efe5a3e985b7a779a2eead9f60924326195c634fdf1c75f'
+        bootstrap_windows_amd64_sha='63888d25ab79fd09982e965e82976a6a4e9055257096697226ac9d0927e2739c'
         notation_executable_name=notation
         notation_venafi_csp_plugin_executable_name=notation-venafi-csp
 
