@@ -157,8 +157,8 @@ runs:
           exit 0
         fi
 
-        log_info "Downloading custom version '${inputs.notation-venafi-csp-release}' of notation-venafi-csp plugin to verify version to be installed...\n      https://github.com/Venafi/notation-venafi-csp/releases/download/${inputs.notation-venafi-csp-release}/${bootstrap_filename}"
-        $SUDO curl -sL https://github.com/Venafi/notation-venafi-csp/releases/download/${inputs.notation-venafi-csp-release}/${bootstrap_filename} -o ${notation_venafi_csp_plugin_executable_name}
+        log_info "Downloading custom version '${{ inputs.notation-venafi-csp-release }}' of notation-venafi-csp plugin to verify version to be installed...\n      https://github.com/Venafi/notation-venafi-csp/releases/download/${{ inputs.notation-venafi-csp-release }}/${bootstrap_filename}"
+        $SUDO curl -sL https://github.com/Venafi/notation-venafi-csp/releases/download/${{ inputs.notation-venafi-csp-release }}/${bootstrap_filename} -o ${notation_venafi_csp_plugin_executable_name}
         $SUDO chmod +x ${notation_venafi_csp_plugin_executable_name}
         if [[ ${{ runner.os }} == "macOS" ]]; then
           $SUDO mkdir -p  ~/Library/Application\ Support/notation/plugins/venafi-csp/
